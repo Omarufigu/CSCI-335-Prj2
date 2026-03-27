@@ -1,0 +1,58 @@
+contains() average time in milliseconds
+Inventory         n       avg_ms        
+----------------------------------------
+vector            1000    0.000658      
+list              1000    0.004986      
+hash              1000    0.000122      
+tree              1000    0.004991      
+vector            2000    0.001809      
+list              2000    0.010268      
+hash              2000    0.000125      
+tree              2000    0.014612      
+vector            4000    0.002836      
+list              4000    0.022591      
+hash              4000    0.000128      
+tree              4000    0.031389      
+vector            8000    0.007874      
+list              8000    0.070360      
+hash              8000    0.000393      
+tree              8000    0.078612      
+
+query() average time in milliseconds
+Inventory         Comparator    n       avg_ms        
+------------------------------------------------------
+vector            name          1000    0.058953      
+list              name          1000    0.060650      
+hash              name          1000    0.069882      
+tree              name          1000    0.047953      
+vector            weight        1000    0.011786      
+list              weight        1000    0.009914      
+hash              weight        1000    0.010190      
+tree              weight        1000    0.000790      
+vector            name          2000    0.122012      
+list              name          2000    0.125320      
+hash              name          2000    0.124208      
+tree              name          2000    0.088341      
+vector            weight        2000    0.013588      
+list              weight        2000    0.024897      
+hash              weight        2000    0.026548      
+tree              weight        2000    0.001756      
+vector            name          4000    0.261782      
+list              name          4000    0.279805      
+hash              name          4000    0.280158      
+tree              name          4000    0.187862      
+vector            weight        4000    0.029240      
+list              weight        4000    0.038824      
+hash              weight        4000    0.047383      
+tree              weight        4000    0.003269      
+vector            name          8000    0.643277      
+list              name          8000    0.777136      
+hash              name          8000    0.859798      
+tree              name          8000    0.605152      
+vector            weight        8000    0.061282      
+list              weight        8000    0.099702      
+hash              weight        8000    0.154777      
+tree              weight        8000    0.008271      
+
+Analysis:
+The hash inventory was the fastest for contains() because unordered_set supports expected constant-time lookup by item name. The vector and list versions were slower because they scan linearly through the container. The AVL-based tree was also slower for contains() than a normal tree search would usually be, because this project requires uniqueness by name even when the tree is ordered by some other comparator, so contains() must traverse the whole tree in the worst case. For query(), the vector, list, and hash inventories all behave like linear scans, while the tree inventory can prune subtrees that fall completely outside the requested range, so it should be the best choice when range queries are common. Use the hash inventory when fast membership checks and exact-name operations matter most, and use the tree inventory when efficient ordered range queries matter more than exact lookup speed.

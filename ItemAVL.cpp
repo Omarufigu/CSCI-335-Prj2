@@ -142,7 +142,7 @@ ItemAVL<Comparator>::~ItemAVL()
 template <class Comparator>
 bool ItemAVL<Comparator>::contains(const std::string& target) const
 {
-    // Your code here
+    return contains(target, root_);
 }
 
 /**
@@ -155,7 +155,13 @@ bool ItemAVL<Comparator>::contains(const std::string& target) const
 template <class Comparator>
 bool ItemAVL<Comparator>::contains(const std::string& target, const Node* subroot) const
 {
-    // Your code here.
+    if (subroot == nullptr) {
+        return false;
+    }
+    if (subroot->value_.name_ == target) {
+        return true;
+    }
+    return contains(target, subroot->left_) || contains(target, subroot->right_);
 }
 
 /**
@@ -249,7 +255,6 @@ float ItemAVL<Comparator>::erase(const std::string& target, Node*& subroot)
     };
 
     if (subroot->left_ && subroot->right_) {
-        // Two children
         std::swap(subroot->value_, findMin(subroot->right_)->value_);
         return erase(target, subroot->right_);
     }
